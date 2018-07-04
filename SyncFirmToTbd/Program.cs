@@ -1,20 +1,24 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using SyncFirmToTbd.Jobs;
 using SyncFirmToTbd.Quartz;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace SyncFirmToTbd
 {
     class Program
     {
         static void Main(string[] args)
+        {
+            MainAsync().GetAwaiter().GetResult();
+        }
+
+        private static async Task MainAsync()
         {
             var host = new HostBuilder()
                 .ConfigureHostConfiguration(configHost =>
@@ -68,7 +72,8 @@ namespace SyncFirmToTbd
                     });
                     services.AddHostedService<SyncFirmHostedService>();
 
-                    services.AddSingleton<TestJob, TestJob>();
+                    services.AddSingleton<TestJob>();
+                    services.AddSingleton<SyncFirmJob>();
                 })
                 .ConfigureLogging((hostContext, configLogging) =>
                 {
@@ -84,7 +89,7 @@ namespace SyncFirmToTbd
                 .UseConsoleLifetime()//使用控制台生命周期  使用Ctrl+C退出
                 .Build();
 
-            host.Run();
+            await host.RunAsync();
         }
     }
 }

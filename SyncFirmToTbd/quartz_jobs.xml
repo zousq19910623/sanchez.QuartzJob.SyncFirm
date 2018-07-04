@@ -9,7 +9,7 @@
   </processing-directives>
 
   <schedule>
-    <job>
+    <!--<job>
       <name>TestJob</name>
       <group>TestGroup</group>
       <description>测试任务</description>
@@ -27,17 +27,36 @@
         <repeat-count>-1</repeat-count>
         <repeat-interval>2000</repeat-interval>
       </simple>
-    </trigger>
-
-    <!--<trigger>
-      <cron>
-        <name>TestTrigger</name>
-        <group>TestGroup</group>
-        <description>测试触发器</description>
-        <job-name>TestJob</job-name>
-        <job-group>TestGroup</job-group>
-        <cron-expression>0/2 * * * * ?</cron-expression>
-      </cron>
     </trigger>-->
+    
+    <job>
+      <name>SyncFirmJob</name>
+      <group>SyncFirmGroup</group>
+      <description>同步公司到TBD任务</description>
+      <job-type>SyncFirmToTbd.Jobs.SyncFirmJob, SyncFirmToTbd</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+    <!--<trigger>
+      <simple>
+        <name>SyncFirmTrigger2</name>
+        <group>SyncFirmGroup</group>
+        <description>测试触发器</description>
+        <job-name>SyncFirmJob</job-name>
+        <job-group>SyncFirmGroup</job-group>
+        <repeat-count>-1</repeat-count>
+        <repeat-interval>2000</repeat-interval>
+      </simple>
+    </trigger>-->
+    <trigger>
+      <cron>
+        <name>SyncFirmTrigger</name>
+        <group>SyncFirmGroup</group>
+        <description>同步公司到TBD的触发器</description>
+        <job-name>SyncFirmJob</job-name>
+        <job-group>SyncFirmGroup</job-group>
+        <cron-expression>0 0 2 1/1 * ? *</cron-expression>
+      </cron>
+    </trigger>
   </schedule>
 </job-scheduling-data>

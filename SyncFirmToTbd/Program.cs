@@ -8,6 +8,9 @@ using SyncFirmToTbd.Jobs;
 using SyncFirmToTbd.Quartz;
 using System.IO;
 using System.Threading.Tasks;
+using SyncFirmToTbd.Repository;
+using SyncFirmToTbd.Services;
+using SyncFirmToTbd.TBD.Services;
 
 namespace SyncFirmToTbd
 {
@@ -60,6 +63,10 @@ namespace SyncFirmToTbd
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
+
+                    services.AddSingleton<FirmService>();
+                    services.AddSingleton<FirmRepository>();
+                    services.AddSingleton<TbdFirmService>();
 
                     services.AddSingleton<IJobFactory, JobFactory>();
                     services.AddSingleton(provider =>

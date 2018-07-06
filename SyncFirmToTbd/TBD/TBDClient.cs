@@ -14,7 +14,7 @@ namespace SyncFirmToTbd.TBD
     {
         private readonly IMemoryCache m_MemoryCache;
 
-        TBDService m_TBDService;
+        readonly TBDService m_TBDService;
         readonly string m_AccessTokenCacheKey = "TbdAccessTokenCache";
 
         public TbdClient(string authServer, string clientId, string clientSerect, string scope, IMemoryCache memoryCache)

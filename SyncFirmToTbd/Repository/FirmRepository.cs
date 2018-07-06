@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,8 +13,8 @@ namespace SyncFirmToTbd.Repository
 {
     public class FirmRepository
     {
-        private readonly string m_FirmConnection;
-        private readonly ILogger m_Logger;
+        private string m_FirmConnection;
+        private ILogger m_Logger;
 
         public FirmRepository(IConfiguration config, ILogger<FirmRepository> logger)
         {
@@ -39,7 +38,7 @@ namespace SyncFirmToTbd.Repository
             }
         }
 
-        public async Task<IEnumerable<EmployerInfo>> GetEmployerInfoByIdsAsync(IEnumerable<int> ids)
+        public async Task<IEnumerable<EmployerInfo>> GetEmployersInfoByIdsAsync(IEnumerable<int> ids)
         {
             Requires.NotNull(ids, nameof(ids));
 

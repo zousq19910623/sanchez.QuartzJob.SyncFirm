@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SyncFirmToTbd
 {
-    public class SyncFirmHostedService : IHostedService//, IDisposable
+    public class SyncFirmHostedService : IHostedService
     {
-        private readonly ILogger m_Logger;
-        private readonly IScheduler m_Scheduler;
+        private ILogger m_Logger;
+        private IScheduler m_Scheduler;
 
 
         public SyncFirmHostedService(ILogger<SyncFirmHostedService> logger, IScheduler scheduler)
@@ -39,10 +39,5 @@ namespace SyncFirmToTbd
 
             //return Task.CompletedTask;
         }
-
-        //public void Dispose()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

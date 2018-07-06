@@ -8,8 +8,8 @@ namespace SyncFirmToTbd.Jobs
 {
     public class SyncFirmJob : IJob
     {
-        private readonly ILogger m_Logger;
-        private readonly FirmService m_FirmService;
+        private ILogger m_Logger;
+        private FirmService m_FirmService;
 
         public SyncFirmJob(ILogger<SyncFirmJob> logger, FirmService firmService)
         {

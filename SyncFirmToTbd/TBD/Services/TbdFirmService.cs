@@ -1,5 +1,4 @@
 ﻿using Baza.ComponentModel;
-//using Baza.Infrastructure.Configuration;
 using Baza.TBD.Common.Web;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +7,6 @@ using Newtonsoft.Json;
 using SyncFirmToTbd.TBD.Models;
 using System;
 using System.Threading.Tasks;
-using Baza.TBD.OpenAPI.Client;
 
 namespace SyncFirmToTbd.TBD.Services
 {
@@ -55,32 +53,5 @@ namespace SyncFirmToTbd.TBD.Services
 
             return InvokedResult.Ok(result.Data);
         }
-
-        //public async Task<InvokedResult> UpdateFirmAsync(Firm firm)
-        //{
-        //    var tdbFirm = DbContext.Set<TBDFirm>().FirstOrDefault(f => f.FirmId == firm.Id);
-        //    if (tdbFirm == null)
-        //        return InvokedResult.Fail("FirmNotFind", "没找到这个公司");
-
-        //    var url = $"{m_OpenApiUrl}Firms/{tdbFirm.TBDObjectId}";
-        //    //var url = $"{m_OpenApiUrl}Firms/";
-        //    var responseBody = await m_TbdClient.PutAsync(url, new
-        //    {
-        //        name = firm.Name,
-        //        shortName = string.IsNullOrEmpty(firm.ShortName) ? firm.Name : firm.ShortName,
-        //        sourceChannel = m_SourceChannel,
-        //        sourceId = firm.Id,
-        //        location = firm.Location,
-        //        industry = firm.Industry,
-        //        identityType = 1,
-        //        status = firm.Status
-        //    });
-
-        //    var result = JsonConvert.DeserializeObject<WebApiResponse>(responseBody);
-        //    if (!result.Success)
-        //        throw new Exception($"更新公司出错：{result.Error.Description}");
-
-        //    return InvokedResult.SucceededResult;
-        //}
     }
 }

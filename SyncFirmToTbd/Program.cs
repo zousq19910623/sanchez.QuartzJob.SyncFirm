@@ -2,15 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using Quartz.Impl;
 using Quartz.Spi;
 using SyncFirmToTbd.Jobs;
 using SyncFirmToTbd.Quartz;
-using System.IO;
-using System.Threading.Tasks;
 using SyncFirmToTbd.Repository;
 using SyncFirmToTbd.Services;
 using SyncFirmToTbd.TBD.Services;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace SyncFirmToTbd
 {
@@ -64,6 +66,8 @@ namespace SyncFirmToTbd
                 {
                     services.AddLogging();
 
+                    //ConfigureServices(services);
+
                     services.AddSingleton<FirmService>();
                     services.AddSingleton<FirmRepository>();
                     services.AddSingleton<TbdFirmService>();
@@ -87,6 +91,9 @@ namespace SyncFirmToTbd
                     //输出控制台日志
                     configLogging.AddConsole();
 
+                    configLogging.AddNLog();
+                    NLogBuilder.ConfigureNLog("nlog.config");
+
                     //开发环境输出Debug日志
                     if (hostContext.HostingEnvironment.EnvironmentName == EnvironmentName.Development)
                     {
@@ -96,7 +103,20 @@ namespace SyncFirmToTbd
                 .UseConsoleLifetime()//使用控制台生命周期  使用Ctrl+C退出
                 .Build();
 
+
             await host.RunAsync();
+        }
+
+
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLogging();
+            var provider = services.BuildServiceProvider();
+
+            var factory = provider.GetService<ILoggerFactory>();
+            factory.AddNLog();
+            NLog.LogManager.LoadConfiguration("nlog.config");
         }
     }
 }

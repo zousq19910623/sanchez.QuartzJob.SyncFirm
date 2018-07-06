@@ -47,7 +47,7 @@ namespace SyncFirmToTbd.Services
                 m_Logger.LogInformation("没有需要同步的公司");
                 return InvokedResult.SucceededResult;
             }
-            var emploperInfos = await GetEmployerInfoAsync(ids);
+            var emploperInfos = await GetEmployersInfoAsync(ids);
             foreach (var employerInfo in emploperInfos)
             {
                 var firm = new Firm
@@ -78,9 +78,9 @@ namespace SyncFirmToTbd.Services
             return InvokedResult.SucceededResult;
         }
 
-        private async Task<IEnumerable<EmployerInfo>> GetEmployerInfoAsync(IEnumerable<int> ids)
+        private async Task<IEnumerable<EmployerInfo>> GetEmployersInfoAsync(IEnumerable<int> ids)
         {
-            return await m_FirmRepository.GetEmployerInfoByIdsAsync(ids);
+            return await m_FirmRepository.GetEmployersInfoByIdsAsync(ids);
         }
     }
 }

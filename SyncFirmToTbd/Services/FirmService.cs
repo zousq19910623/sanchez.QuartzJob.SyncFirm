@@ -72,8 +72,6 @@ namespace SyncFirmToTbd.Services
                 {
                     m_Logger.LogInformation(ex.Message);
                 }
-
-
             }
             return InvokedResult.SucceededResult;
         }

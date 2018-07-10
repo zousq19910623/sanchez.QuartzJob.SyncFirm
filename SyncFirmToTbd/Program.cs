@@ -54,14 +54,6 @@ namespace SyncFirmToTbd
                     //可以在启动host的时候之前可传入参数，暂不需要先注释掉，可根据需要开启
                     //configApp.AddCommandLine(args);
                 })
-                //.ConfigureServices((hostContext, services) =>
-                //{
-                //    //添加日志Service
-                //    services.AddLogging();
-
-                //    //添加SyncFirm Hosted Service
-                //    services.AddHostedService<SyncFirmHostedService>();
-                //})
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
@@ -102,21 +94,8 @@ namespace SyncFirmToTbd
                 })
                 .UseConsoleLifetime()//使用控制台生命周期  使用Ctrl+C退出
                 .Build();
-
-
+            
             await host.RunAsync();
-        }
-
-
-
-        private static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddLogging();
-            var provider = services.BuildServiceProvider();
-
-            var factory = provider.GetService<ILoggerFactory>();
-            factory.AddNLog();
-            NLog.LogManager.LoadConfiguration("nlog.config");
         }
     }
 }

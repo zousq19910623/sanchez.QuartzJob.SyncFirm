@@ -55,7 +55,7 @@
         <description>同步新公司到TBD的触发器</description>
         <job-name>SyncFirmJob</job-name>
         <job-group>SyncFirmGroup</job-group>
-        <cron-expression>* * * * * ?</cron-expression>
+        <cron-expression>0 0 20 * * ?</cron-expression>
       </cron>
     </trigger>
   </schedule>

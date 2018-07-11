@@ -57,9 +57,7 @@ namespace SyncFirmToTbd
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddLogging();
-
-                    //ConfigureServices(services);
-
+                    
                     services.AddSingleton<FirmService>();
                     services.AddSingleton<FirmRepository>();
                     services.AddSingleton<TbdFirmService>();

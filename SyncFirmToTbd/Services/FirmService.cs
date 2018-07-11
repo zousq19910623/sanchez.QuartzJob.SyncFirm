@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using SyncFirmToTbd.Config;
 
 namespace SyncFirmToTbd.Services
 {
@@ -16,31 +18,38 @@ namespace SyncFirmToTbd.Services
     {
         private FirmRepository m_FirmRepository;
         private TbdFirmService m_TbdFirmService;
+        private TimingOption m_TimingOption;
         private readonly ILogger m_Logger;
 
-        public FirmService(FirmRepository firmRepository, TbdFirmService tbdFirmService, ILogger<FirmService> logger)
+        public FirmService(FirmRepository firmRepository, TbdFirmService tbdFirmService, ILogger<FirmService> logger, IConfiguration config)
         {
             m_FirmRepository = firmRepository;
             m_TbdFirmService = tbdFirmService;
             m_Logger = logger;
+            m_TimingOption = new TimingOption();
+            var section = config.GetSection("TimingOption");
+            section.Bind(m_TimingOption);
         }
 
         /// <summary>
-        /// 获取一个月内新增的雇主
+        /// 获取指定时间内新增的雇主,默认查询时间为1天
         /// </summary>
+        /// <param name="days">天数，默认为1</param>
+        /// <param name="mouths">月数，默认为0</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Employer>> GetNewEmployersInMouthAsync()
+        public async Task<IEnumerable<Employer>> GetNewEmployersInMouthAsync(int days = 1, int mouths = 0)
         {
             var nowDate = DateTime.Now;
-            var oneMonthAgeDate = nowDate.AddMonths(-1);
-            var employers = await m_FirmRepository.GetEmployersBetweenDateAsync(oneMonthAgeDate, nowDate);
-            m_Logger.LogInformation($"获取一个月内新增的雇主，开始时间为：{oneMonthAgeDate}，结束时间为：{nowDate}");
+            var fromDate = nowDate.AddDays(-days).AddMonths(-mouths);
+            var employers = await m_FirmRepository.GetEmployersBetweenDateAsync(fromDate, nowDate);
+            m_Logger.LogInformation($"获取{nowDate.Subtract(fromDate).Days}天内新增的雇主，开始时间为：{fromDate}，结束时间为：{nowDate}");
             return employers;
         }
 
         public async Task<InvokedResult> PutNewEmployerToTbdAsync()
         {
-            var employers = await GetNewEmployersInMouthAsync();
+            SetTimingOption(m_TimingOption);
+            var employers = await GetNewEmployersInMouthAsync(m_TimingOption.Days, m_TimingOption.Mouths);
             var ids = employers.Select(e => e.Id).ToList();
             if (ids.Count <= 0)
             {
@@ -74,6 +83,14 @@ namespace SyncFirmToTbd.Services
                 }
             }
             return InvokedResult.SucceededResult;
+        }
+
+        private void SetTimingOption(TimingOption timingOption)
+        {
+            if (timingOption == null)
+            {
+                m_TimingOption = new TimingOption {Days = 1, Mouths = 0};
+            }
         }
 
         private async Task<IEnumerable<EmployerInfo>> GetEmployersInfoAsync(IEnumerable<int> ids)

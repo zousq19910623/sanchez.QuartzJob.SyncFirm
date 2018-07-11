@@ -8,18 +8,14 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
+using SyncFirmToTbd.Models;
 
 namespace SyncFirmToTbd.Repository
 {
-    public class FirmRepository
+    public class FirmRepository : BaseRepository
     {
-        private string m_FirmConnection;
-        private ILogger m_Logger;
-
-        public FirmRepository(IConfiguration config, ILogger<FirmRepository> logger)
+        public FirmRepository(IConfiguration config, ILogger<FirmRepository> logger) : base(config, logger)
         {
-            m_FirmConnection = config["ConnectionStrings:BazaAts"];
-            m_Logger = logger;
         }
 
         public async Task<IEnumerable<Employer>> GetEmployersBetweenDateAsync(DateTime startDate, DateTime endDate)
@@ -27,7 +23,7 @@ namespace SyncFirmToTbd.Repository
             Requires.NotNullOrEmpty(startDate.ToString(CultureInfo.InvariantCulture), nameof(startDate));
             Requires.NotNullOrEmpty(endDate.ToString(CultureInfo.InvariantCulture), nameof(endDate));
 
-            using (var conn = new SqlConnection(m_FirmConnection))
+            using (var conn = new SqlConnection(m_Connection))
             {
                 conn.Open();
 
@@ -42,7 +38,7 @@ namespace SyncFirmToTbd.Repository
         {
             Requires.NotNull(ids, nameof(ids));
 
-            using (var conn = new SqlConnection(m_FirmConnection))
+            using (var conn = new SqlConnection(m_Connection))
             {
                 conn.Open();
 
@@ -63,12 +59,12 @@ namespace SyncFirmToTbd.Repository
 
         public async Task<bool> UpdateTbdFirmIdAsync(int id, string tbdFirmId)
         {
-            using (var conn=new SqlConnection(m_FirmConnection))
+            using (var conn = new SqlConnection(m_Connection))
             {
                 conn.Open();
 
                 const string sql = "update t_employer set tbd_firm_id=@tbdFirmId where id=@id";
-                var result = await conn.ExecuteAsync(sql, new {id, tbdFirmId});
+                var result = await conn.ExecuteAsync(sql, new { id, tbdFirmId });
                 return result > 0;
             }
         }

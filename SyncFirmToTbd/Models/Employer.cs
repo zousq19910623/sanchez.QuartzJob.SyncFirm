@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SyncFirmToTbd.Repository
+namespace SyncFirmToTbd.Models
 {
     public class Employer
     {

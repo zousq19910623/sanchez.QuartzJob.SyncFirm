@@ -59,7 +59,10 @@ namespace SyncFirmToTbd
                     services.AddLogging();
                     
                     services.AddSingleton<FirmService>();
+                    services.AddSingleton<PassportService>();
+                    services.AddSingleton<BaseRepository>();
                     services.AddSingleton<FirmRepository>();
+                    services.AddSingleton<UserRepository>();
                     services.AddSingleton<TbdFirmService>();
 
                     services.AddSingleton<IJobFactory, JobFactory>();
